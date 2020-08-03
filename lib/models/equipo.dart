@@ -1,11 +1,11 @@
 class Equipo {
   
-  final int iD;
-  final String matriculaE1;
-	final String matriculaE2;
-	final String matriculaE3;
-	final String codigoGrupo;
-	final String contraGrupo;
+  int iD;
+  String matriculaE1;
+	String matriculaE2;
+	String matriculaE3;
+	String codigoGrupo;
+	String contraGrupo;
 
   Equipo({this.iD, this.matriculaE1, this.matriculaE2, this.matriculaE3, this.codigoGrupo, this.contraGrupo});
 
@@ -19,6 +19,27 @@ class Equipo {
       contraGrupo: parsedJson['ContraGrupo'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic> {
+      'id': iD,
+      'matriculaE1': matriculaE1,
+      'matriculaE2': matriculaE2,
+      'matriculaE3': matriculaE3,
+      'codigoGrupo': codigoGrupo,
+      'contraGrupo': contraGrupo,
+    };
+  }
+
+  Equipo.fromMap(Map<String, dynamic> map) {
+    iD = map['id'];
+    matriculaE1 = map['matriculaE1'];
+    matriculaE2 = map['matriculaE2'];
+    matriculaE3 = map['matriculaE3'];
+    codigoGrupo = map['codigoGrupo'];
+    contraGrupo = map['contraGrupo'];
+  }
+
 }
 
 class EquipoList {
