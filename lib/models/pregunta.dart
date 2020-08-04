@@ -1,8 +1,8 @@
 class Pregunta {
   
-  final int id;
-  final String preg;
-	final int estacionID;
+  int id;
+  String preg;
+	int estacionID;
 
   Pregunta({this.id, this.preg, this.estacionID});
 
@@ -12,6 +12,20 @@ class Pregunta {
       preg: parsedJson['Preg'],
       estacionID: parsedJson['EstacionID'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic> {
+      'id': id,
+      'preg': preg,
+      'estacionID': estacionID,
+    };
+  }
+
+  Pregunta.fromMap(Map<String, dynamic> map) {
+    id = map['id'];
+    preg = map['preg'];
+    estacionID = map['estacionID'];
   }
 }
 
