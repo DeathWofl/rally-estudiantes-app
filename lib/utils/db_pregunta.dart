@@ -13,7 +13,6 @@ class DBPregunta extends DBHelper {
 
   Future<List<Pregunta>> getAllProduct() async {
     var dbClient = await db;
-    // List<Map> maps = await dbClient.query(DBHelper.TABLES[0], columns: ["id"]);
     List<Map> maps = await dbClient.rawQuery("SELECT * FROM ${DBHelper.TABLES[1]}");
     List<Pregunta> pregunta = [];
     for (var item in maps) {
