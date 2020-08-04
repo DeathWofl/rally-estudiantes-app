@@ -1,9 +1,9 @@
 class Respuestas {
   
-  final int iD;
-  final String resp;
-	final int valor;
-	final int preguntaID;
+  int iD;
+  String resp;
+	int valor;
+	int preguntaID;
 
   Respuestas({this.iD, this.resp, this.valor, this.preguntaID});
 
@@ -15,6 +15,23 @@ class Respuestas {
       preguntaID: parsedJson['PreguntaID'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic> {
+      'id': iD,
+      'resp': resp,
+      'valor': valor,
+      'preguntaID': preguntaID,
+    };
+  }
+
+  Respuestas.fromMap(Map<String, dynamic> map) {
+    iD = map['id'];
+    resp = map['resp'];
+    valor = map['valor'];
+    preguntaID = map['preguntaID']; 
+  }
+
 }
 
 class ListRespuestas {
