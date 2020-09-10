@@ -23,6 +23,7 @@ class Respuestas {
       'valor': valor,
       'preguntaID': preguntaID,
     };
+    return map;
   }
 
   Respuestas.fromMap(Map<String, dynamic> map) {

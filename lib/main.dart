@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'pages/login.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }

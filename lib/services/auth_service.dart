@@ -21,6 +21,8 @@ class Auth {
       Token = decode['token'];
       EquipoService.personalCodigoGrupo = decode['CodigoGrupo'];
 
+      print("Auth Service: ${response.statusCode}");
+      print("Token: ${decode['token']}");
       return response.statusCode;
     } catch (e) {
       print(e);
