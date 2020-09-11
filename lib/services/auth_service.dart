@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:async';
-import 'equipo_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'data_service.dart';
 import 'package:estudiantes/utils/server.dart';
 
 
 class Auth {
-  
-  static String Token;
 
   static Future<int> signIn(String username, String password) async {
     try {
@@ -16,10 +16,14 @@ class Auth {
 	      "ContraGrupo": password
       });
 
-      print(response.statusCode);
+      print("Auth Service: ${response.statusCode}");
+
       Map<String, dynamic> decode = json.decode(response.body);
-      Token = decode['token'];
+      String token = decode['token'];
       EquipoService.personalCodigoGrupo = decode['CodigoGrupo'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', token);
 
       return response.statusCode;
     } catch (e) {
