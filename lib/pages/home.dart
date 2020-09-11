@@ -1,4 +1,3 @@
-import 'package:estudiantes/pages/prueba.dart';
 import 'package:flutter/material.dart';
 import 'pregunta.dart';
 import 'qr.dart';
@@ -17,12 +16,11 @@ class _HomeState extends State<Home> {
   List<Widget> _listPages = List();
   int _currentIndex = 0;
 
-  
-
   @override
   void initState() { 
     super.initState();
-    _listPages..add(Preguntas())..add(QR())..add(Probando());
+    
+    _listPages..add(Preguntas())..add(QR());
     _currentPage = Preguntas();
   }
 
@@ -49,10 +47,6 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(FontAwesome.qrcode),
             title: Text('QR')
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesome.times),
-            title: Text('Registros')
           )
         ]
       ),

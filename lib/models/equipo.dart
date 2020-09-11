@@ -6,13 +6,12 @@ class Equipo {
 	String matriculaE3;
 	String codigoGrupo;
 	String contraGrupo;
-  int aPIID;
 
-  Equipo({this.iD, this.matriculaE1, this.matriculaE2, this.matriculaE3, this.codigoGrupo, this.contraGrupo, this.aPIID});
+  Equipo({this.iD, this.matriculaE1, this.matriculaE2, this.matriculaE3, this.codigoGrupo, this.contraGrupo});
 
   factory Equipo.fromJson(Map<String, dynamic> parsedJson) {
     return Equipo(
-      aPIID: parsedJson['ID'],
+      iD: parsedJson['ID'],
       matriculaE1: parsedJson['matriculaE1'],
       matriculaE2: parsedJson['matriculaE2'],
       matriculaE3: parsedJson['matriculaE3'],
@@ -29,14 +28,11 @@ class Equipo {
       'matriculaE3': matriculaE3,
       'codigoGrupo': codigoGrupo,
       'contraGrupo': contraGrupo,
-      'aPIID': aPIID
     };
-    return map;
   }
 
   Equipo.fromMap(Map<String, dynamic> map) {
     iD = map['id'];
-    aPIID = map['APIID'];
     matriculaE1 = map['matriculaE1'];
     matriculaE2 = map['matriculaE2'];
     matriculaE3 = map['matriculaE3'];

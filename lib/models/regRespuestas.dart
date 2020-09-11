@@ -16,7 +16,6 @@ class RegRespuestas {
       'calificacion': calificacion,
       'equipoID': equipoID,
     };
-    return map;
   }
 
   RegRespuestas.fromMap(Map<String, dynamic> map) {
