@@ -1,4 +1,4 @@
-import 'package:estudiantes/services/equipo_service.dart';
+import 'package:estudiantes/services/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -14,7 +14,7 @@ class QR extends StatelessWidget {
           height: double.maxFinite,
           alignment: Alignment.center,
           child: QrImage(
-            data: EquipoService.personalCodigoGrupo,
+            data: DataService.personalCodigoGrupo,
             version: QrVersions.auto,
             size: 250.0,
           )

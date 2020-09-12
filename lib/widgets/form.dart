@@ -1,4 +1,6 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:estudiantes/services/auth_service.dart';
+import 'package:estudiantes/services/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,32 +20,12 @@ class _LoginFormState extends State<LoginFormWidget> {
   String _password;
   String _username;
 
+  DataService dataService;
+
   @override
   void initState() { 
-    validateFirst();
     super.initState();
-  }
-
-  validateFirst() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getBool("first") == null ? prefs.setBool("first", true) : prefs.setBool("first", false);
-  }
-
-  void migrateAndLogin(BuildContext _context) async {
-    Scaffold.of(_context).showSnackBar(SnackBar(
-      content: Text('Logueado con Migracion'),
-      backgroundColor: Colors.lightGreen,
-    ));
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("first", false);
-  }
-
-  void loginOffline(BuildContext _context) async {
-    Scaffold.of(_context).showSnackBar(SnackBar(
-      content: Text('Logueado Offline'),
-      backgroundColor: Colors.lightGreen,
-    ));
-    // SharedPreferences prefs = await SharedPreferences.getInstance(); 
+    dataService = DataService();
   }
 
   @override
@@ -163,51 +145,145 @@ class _LoginFormState extends State<LoginFormWidget> {
     return value.isEmpty ? 'Es Necesario LLenar este campo' : null ;
   }
 
+  void migrateAndLogin(BuildContext _context) async {
+
+    // logearse
+    int code = await AuthService.signIn(_username, _password);
+
+    if (code != 200) {
+      snack(
+        context: context,
+        title: "Se ha producido un error",
+        icon: Icon(MaterialCommunityIcons.alert_circle),
+        color: Colors.red
+      );
+    }
+    else{
+
+    // trayendo datos de la API
+    await dataService.getEquipos();
+    await dataService.getPreguntas();
+    await dataService.getRespuestas();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("first", false);
+
+    snack(
+      context: context,
+      title: "Bienvenido con Migracion.",
+      color: Colors.green,
+      icon: Icon(MaterialCommunityIcons.check_bold),    
+    );
+
+    // pasar a la proxima pagina
+    Future.delayed(Duration(seconds: 5), () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    });
+    }
+  }
+
+  void loginOffline(BuildContext _context) async {
+
+    bool code = await AuthService.login(_username, _password);
+
+   if(code) {
+    snack(
+      context: context,
+      title: "Bienvenido Offline",
+      color: Colors.green,
+      icon: Icon(MaterialCommunityIcons.check_bold),
+    );
+
+    // pasar a la proxima pagina
+    Future.delayed(Duration(seconds: 5), () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    });
+   }
+   else
+    snack(
+      context: context,
+      title: "Ha ocurrido un error.",
+      color: Colors.red,
+      icon: Icon(MaterialCommunityIcons.alert_circle),
+    );
+  }
+
   void _submitData(BuildContext context) async {
     if (_formGlobalKey.currentState.validate()) {
       _formGlobalKey.currentState.save();
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.getBool("first") ? migrateAndLogin(context) : loginOffline(context);
+      // revisar conexion
+      var connectityresult = await Connectivity().checkConnectivity();
 
-      // final redSnackbar = SnackBar(
-      //   duration: Duration(seconds: 3),
-      //   backgroundColor: Colors.red,
-      //   behavior: SnackBarBehavior.floating,
-      //   content: Row(
-      //     mainAxisSize: MainAxisSize.max,
-      //     children: <Widget>[
-      //       Icon(MaterialCommunityIcons.alert_circle),
-      //       SizedBox(width: 10),
-      //       Text('Usuario o Contraseña incorrecta')
-      //     ],
-      //   )
-      // );
+      // configurando first en caso de que no exista
+      if (prefs.getBool("first") == null) await prefs.setBool("first", true);
 
-      // await Auth.signIn(_username, _password) == 200 ? ok(context) : Scaffold.of(context).showSnackBar(redSnackbar);
-      // print('Enviado');
+      if (prefs.getBool("first")) {
+        if (connectityresult == ConnectivityResult.none) {
+          return showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Advertencia."),
+                content: Text("Es necesario conexion a internet."), 
+                actions: [
+                  FlatButton(onPressed: null, child: Text("Ok"))
+                ],
+              );
+            },
+          );
+        }
+        return migrateAndLogin(context);
+      }
+      else {
+        if (connectityresult == ConnectivityResult.none) {
+          return loginOffline(context);
+        }
+        else if(connectityresult == ConnectivityResult.mobile) {
+          return showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                // title: Text("Advertencia."),
+                content: Text("Esta utilizando datos mobiles, desea utilizarlos para el proceso."),
+                actions: [
+                  FlatButton(
+                    onPressed: () => loginOffline(context),
+                    child: Text("No")
+                  ),
+                  FlatButton(
+                    onPressed: () => migrateAndLogin(context),
+                    child: Text("Ok")
+                  ),
+                ],
+              );
+            },
+          );
+        }
+        else {
+          migrateAndLogin(context);
+        }
+      }
     }
   }
 
-  void ok(BuildContext context) {
-    
-    final greenSnackbar = SnackBar(
+  void snack({BuildContext context,String title, Icon icon, Color color}) {
+    final snackbar = SnackBar(
         duration: Duration(seconds: 3),
-        backgroundColor: Colors.green,
+        backgroundColor: color,
         behavior: SnackBarBehavior.floating,
         content: Row(
           children: <Widget>[
-            Icon(MaterialCommunityIcons.check_bold),
+            icon,
             SizedBox(width: 10),
-            Text('Bienvenido')
+            Text(title)
           ],
         )
       );
-    Scaffold.of(context).showSnackBar(greenSnackbar);
-
-    Future.delayed(Duration(seconds: 5), () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-    });
+    Scaffold.of(context).showSnackBar(snackbar);
   }
 
 }

@@ -5,13 +5,12 @@ import 'package:estudiantes/utils/server.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
-class EquipoService {
+class DataService {
 
   static String personalCodigoGrupo;
 
-  Future<int> GetEquipos() async {
+  Future<int> getEquipos() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('token');
@@ -27,6 +26,7 @@ class EquipoService {
       EquipoList equipos = EquipoList.fromJson(decode);
 
       Box<Equipo> boxequipos = Hive.box<Equipo>('equipos');
+      boxequipos.clear();
 
       for (var item in equipos.equipo) {
         boxequipos.add(item);
@@ -38,7 +38,7 @@ class EquipoService {
     }
   } 
 
-  Future<int> GetPreguntas() async {
+  Future<int> getPreguntas() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('token');
@@ -54,6 +54,7 @@ class EquipoService {
       PreguntaList preguntas = PreguntaList.fromJson(decode);
 
       Box<Pregunta> boxpreguntas = Hive.box<Pregunta>('preguntas');
+      boxpreguntas.clear();
 
       for (var item in preguntas.pregunta) {
         boxpreguntas.add(item);
@@ -65,7 +66,7 @@ class EquipoService {
     }
   }
 
-  Future<int> GetRespuestas() async {
+  Future<int> getRespuestas() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('token');
@@ -81,6 +82,7 @@ class EquipoService {
       ListRespuestas respuestas = ListRespuestas.fromJson(decode);
 
       Box<Respuestas> boxrespuestas = Hive.box<Respuestas>('respuestas');
+      boxrespuestas.clear();
 
       for (var item in respuestas.respuesta) {
         boxrespuestas.add(item);
@@ -92,5 +94,4 @@ class EquipoService {
     }
   }
 
-  
 }
