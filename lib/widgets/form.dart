@@ -1,9 +1,13 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:estudiantes/models/equipo.dart';
+import 'package:estudiantes/models/pregunta.dart';
+import 'package:estudiantes/models/respuestas.dart';
 import 'package:estudiantes/services/auth_service.dart';
 import 'package:estudiantes/services/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 
 import 'package:estudiantes/pages/home.dart';
 
@@ -161,6 +165,9 @@ class _LoginFormState extends State<LoginFormWidget> {
     else{
 
     // trayendo datos de la API
+    Hive.box<Equipo>("equipos").clear();
+    Hive.box<Pregunta>("preguntas").clear();
+    Hive.box<Respuestas>("respuestas").clear();
     await dataService.getEquipos();
     await dataService.getPreguntas();
     await dataService.getRespuestas();

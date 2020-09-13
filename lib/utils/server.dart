@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 
 class Server {
 
-  static String URL = '10.0.0.8:1323';
+  static const String URL = '10.0.0.10:1323';
   static var client = http.Client();
 
   static Map<String, String> getHeader(String token) {

@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
 import 'data_service.dart';
 import 'package:estudiantes/utils/server.dart';
 import 'package:estudiantes/models/equipo.dart';

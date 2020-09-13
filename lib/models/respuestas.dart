@@ -13,31 +13,14 @@ class Respuestas {
   @HiveField(2)
 	int preguntaID;
 
-  Respuestas({/*this.iD,*/ this.resp, this.valor, this.preguntaID});
+  Respuestas({this.resp, this.valor, this.preguntaID});
 
   factory Respuestas.fromJson(Map<String, dynamic> parsedJson) {
     return Respuestas(
-      // iD: parsedJson['ID'],
       resp: parsedJson['Resp'],
       valor: parsedJson['Valor'],
       preguntaID: parsedJson['PreguntaID'],
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    var map = <String, dynamic> {
-      // 'id': iD,
-      'resp': resp,
-      'valor': valor,
-      'preguntaID': preguntaID,
-    };
-  }
-
-  Respuestas.fromMap(Map<String, dynamic> map) {
-    // iD = map['id'];
-    resp = map['resp'];
-    valor = map['valor'];
-    preguntaID = map['preguntaID']; 
   }
 
 }

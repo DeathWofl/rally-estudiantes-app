@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'pregunta.dart';
 import 'qr.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'prueba.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -20,7 +21,7 @@ class _HomeState extends State<Home> {
   void initState() { 
     super.initState();
     
-    _listPages..add(Preguntas())..add(QR());
+    _listPages..add(Preguntas())..add(QR())..add(Prueba());
     _currentPage = Preguntas();
   }
 
@@ -47,6 +48,10 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(FontAwesome.qrcode),
             title: Text('QR')
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesome.adn),
+            title: Text("Registros")
           )
         ]
       ),

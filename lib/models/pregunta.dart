@@ -5,7 +5,6 @@ part 'pregunta.g.dart';
 @HiveType(typeId: 1)
 class Pregunta {
   
-  // int id;
   @HiveField(0)
   String preg;
   @HiveField(1)
@@ -13,7 +12,7 @@ class Pregunta {
   @HiveField(2)
   int apiID;
 
-  Pregunta({/*this.id,*/ this.preg, this.estacionID, this.apiID});
+  Pregunta({this.preg, this.estacionID, this.apiID});
 
   factory Pregunta.fromJson(Map<String, dynamic> parsedJson) {
     return Pregunta(
@@ -21,20 +20,6 @@ class Pregunta {
       preg: parsedJson['Preg'],
       estacionID: parsedJson['EstacionID'],
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    var map = <String, dynamic> {
-      'apiID': apiID,
-      'preg': preg,
-      'estacionID': estacionID,
-    };
-  }
-
-  Pregunta.fromMap(Map<String, dynamic> map) {
-    apiID = map['apiID'];
-    preg = map['preg'];
-    estacionID = map['estacionID'];
   }
 }
 

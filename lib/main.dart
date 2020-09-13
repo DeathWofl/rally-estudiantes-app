@@ -3,14 +3,12 @@ import 'package:estudiantes/models/pregunta.dart';
 import 'package:estudiantes/models/regRespuestas.dart';
 import 'package:estudiantes/models/respuestas.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'pages/login.dart';
 
 void main() async {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Hive.initFlutter();
   Hive.registerAdapter(EquipoAdapter());
   Hive.registerAdapter(PreguntaAdapter());

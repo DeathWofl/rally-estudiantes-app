@@ -1,5 +1,6 @@
 import 'package:estudiantes/models/equipo.dart';
 import 'package:estudiantes/models/pregunta.dart';
+import 'package:estudiantes/models/regRespuestas.dart';
 import 'package:estudiantes/models/respuestas.dart';
 import 'package:estudiantes/utils/server.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,7 +27,6 @@ class DataService {
       EquipoList equipos = EquipoList.fromJson(decode);
 
       Box<Equipo> boxequipos = Hive.box<Equipo>('equipos');
-      boxequipos.clear();
 
       for (var item in equipos.equipo) {
         boxequipos.add(item);
@@ -54,7 +54,6 @@ class DataService {
       PreguntaList preguntas = PreguntaList.fromJson(decode);
 
       Box<Pregunta> boxpreguntas = Hive.box<Pregunta>('preguntas');
-      boxpreguntas.clear();
 
       for (var item in preguntas.pregunta) {
         boxpreguntas.add(item);
@@ -82,7 +81,6 @@ class DataService {
       ListRespuestas respuestas = ListRespuestas.fromJson(decode);
 
       Box<Respuestas> boxrespuestas = Hive.box<Respuestas>('respuestas');
-      boxrespuestas.clear();
 
       for (var item in respuestas.respuesta) {
         boxrespuestas.add(item);
@@ -92,6 +90,24 @@ class DataService {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<int> postRegRespuesta() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token');
+
+      List<RegRespuestas> regs = Hive.box<RegRespuestas>('regrespuestas').values.toList();
+      var response;
+
+      for (var item in regs) {
+        var uri = Uri.http(Server.URL, "/api/app/regrespuesta");
+        print(json.encode(item.toJson()));
+        response = await Server.client.post(uri, body: json.encode(item.toJson()),headers: {
+          'Authorization': 'Bearer $token',
+        });
+      }
+
+    return response.statusCode;
   }
 
 }
