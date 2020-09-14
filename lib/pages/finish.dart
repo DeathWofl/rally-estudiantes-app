@@ -61,12 +61,12 @@ class Finish extends StatelessWidget {
       dataService.postRegRespuesta();
       return showDialog(
         context: context,
-        barrierDismissible: false,
+        // barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             title: Text("Gracias."),
             content: Text("Gracias por concluir el proceso, puede cerrar la app.."),
-            actions: [FlatButton(onPressed:() => print("Terminado"), child: Text("Ok"))],
+            actions: [FlatButton(onPressed:() => Navigator.of(context).pop(), child: Text("Ok"))],
           );
         },
       );

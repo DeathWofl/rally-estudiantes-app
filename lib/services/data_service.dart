@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:estudiantes/models/equipo.dart';
 import 'package:estudiantes/models/pregunta.dart';
 import 'package:estudiantes/models/regRespuestas.dart';
@@ -93,21 +95,23 @@ class DataService {
   }
 
   Future<int> postRegRespuesta() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {  
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('token');
 
       List<RegRespuestas> regs = Hive.box<RegRespuestas>('regrespuestas').values.toList();
-      var response;
+      
+      var uri = Uri.http(Server.URL, "/api/app/regrespuesta/all");
+      print(json.encode(regs));
+      var response = await Server.client.post(uri, body: json.encode(regs), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
 
-      for (var item in regs) {
-        var uri = Uri.http(Server.URL, "/api/app/regrespuesta");
-        print(json.encode(item.toJson()));
-        response = await Server.client.post(uri, body: json.encode(item.toJson()),headers: {
-          'Authorization': 'Bearer $token',
-        });
-      }
-
-    return response.statusCode;
+      return response.statusCode;
+    } catch (e) {
+      print(e);
+    }
   }
 
 }
